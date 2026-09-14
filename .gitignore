@@ -1,5 +1,7 @@
+.env
+*.db
 __pycache__/
 *.pyc
-books.db
+.pytest_cache/
 .venv/
-.env
+venv/
