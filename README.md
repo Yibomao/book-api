@@ -1,13 +1,13 @@
 # book-api
 
-A REST API for managing a book collection 鈥?Flask, PostgreSQL, Docker.
+A REST API for managing a book collection - Flask, PostgreSQL, Docker.
 
-**Live:** https://book-api-uttz.onrender.com 鈥?try [`/books`](https://book-api-uttz.onrender.com/books) or [`/health`](https://book-api-uttz.onrender.com/health)
+**Live:** https://book-api-uttz.onrender.com - try [`/books`](https://book-api-uttz.onrender.com/books) or [`/health`](https://book-api-uttz.onrender.com/health)
 *(free tier: the first request after a period of inactivity takes ~30s to wake the instance)*
 
 Written to practice backend fundamentals end to end: resource-oriented routing,
 request validation, parameterized SQL, connection pooling, containerization, and
-deployment. It started on SQLite and was migrated to PostgreSQL 鈥?the notes below
+deployment. It started on SQLite and was migrated to PostgreSQL - the notes below
 record what that change actually required.
 
 ## Running it
@@ -46,9 +46,9 @@ database behavior is the part worth testing.
 
 | Method | Path            | Description                   | Success | Errors   |
 |--------|-----------------|-------------------------------|---------|----------|
-| GET    | `/`             | Service and endpoint listing  | 200     | 鈥?       |
+| GET    | `/`             | Service and endpoint listing  | 200     | -        |
 | GET    | `/health`       | Liveness + database check     | 200     | 503      |
-| GET    | `/books`        | List books, `?author=` filter | 200     | 鈥?       |
+| GET    | `/books`        | List books, `?author=` filter | 200     | -        |
 | GET    | `/books/<id>`   | Fetch one book                | 200     | 404      |
 | POST   | `/books`        | Create a book                 | 201     | 400      |
 | PUT    | `/books/<id>`   | Replace a book                | 200     | 400, 404 |
@@ -69,7 +69,7 @@ interpolation. An interpolated `WHERE id = {user_input}` would let a caller pass
 only the *shape* of the query is chosen in Python, never the value.
 
 **A connection pool, not a connection per request.** SQLite connections are
-cheap 鈥?opening one per request was fine. A PostgreSQL connection costs a
+cheap - opening one per request was fine. A PostgreSQL connection costs a
 server-side process and a TCP round trip, and the server has a hard connection
 limit, so the app keeps a `SimpleConnectionPool` and borrows from it. The pool is
 built lazily because each gunicorn worker is a separate process and needs its own.
@@ -86,7 +86,7 @@ a busy day.
 
 **`RETURNING` instead of a second query.** PostgreSQL can hand back the inserted
 or updated row from the same statement, so creating a book is one round trip
-rather than an `INSERT` followed by a `SELECT` 鈥?and there is no window where
+rather than an `INSERT` followed by a `SELECT` - and there is no window where
 another transaction could change the row in between.
 
 **JSON errors for a JSON API.** Flask's default 404 and 500 handlers return HTML
@@ -96,7 +96,7 @@ overridden to return the same error shape as every other response.
 **Config comes from the environment.** `DATABASE_URL` and `PORT` are read from
 env vars with no hardcoded fallback to a production value, which is what lets the
 identical image run under Docker Compose locally and on a host that injects its
-own database URL. `.env` is gitignored 鈥?connection strings contain credentials.
+own database URL. `.env` is gitignored - connection strings contain credentials.
 
 **The container doesn't run as root.** The image creates an unprivileged user and
 switches to it, so a compromised process isn't also root inside the container.
